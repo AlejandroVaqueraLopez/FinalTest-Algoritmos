@@ -1,0 +1,109 @@
+<!--
+	Algoritmos
+	Programa para encriptar mensajes con Rot13
+	Vaquera Lopez Alejandro
+	10-04-2023
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--bootstrap cdn-->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+		<title>Rot 13</title>
+	</head>
+
+
+	<body>
+
+		<main style="min-height: 100vh;" class="container-fluid d-flex flex-column align-items-center justify-content-center ">
+
+			<div class="col col-lg-7 ">
+				<div class="container">
+
+					<div class="card">
+						<div class="card-header">
+							Encriptacion con ROT13 - Realizado por Vaquera Lopez Alejandro
+						</div>
+						<div class="card-body">
+
+							<h5 class="card-title">Escribe un mensaje a encriptar</h5>
+							<p class="card-text"><i class="text-primary" id="lblResult">Resultado</i></p>
+
+							<div class="input-group mb-3">
+								<input type="text" id="txtMsg" class="form-control" placeholder="Escribe un mensaje" aria-label="Username" aria-describedby="basic-addon1">
+							</div>
+
+							<button id="btnEncrypt" class="btn btn-primary" type="submit">Encriptar</button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col">
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</main>
+
+		<script>
+
+			//global variables
+			let lblResult = document.getElementById("lblResult");
+			let btnEncrypt = document.getElementById("btnEncrypt");
+			let alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+			let auxIndex = 0;
+			let index = 0;
+			let encryptLimit = 13;
+			let result = [];
+
+			//just for development
+			console.log(alphabet);
+
+			//returns an encrypted letter
+			const encrypt = letter => {
+
+				let cont = 0;
+				let result = "";
+
+				//find index in alphabet
+				index = alphabet.findIndex((item) => (item == letter || item.toUpperCase() == letter));
+				auxIndex = index;
+
+				//is capital letter?
+				let capitalLetter = letter == letter.toUpperCase() ? true : false;
+
+				for(cont = 0; cont < encryptLimit; cont++){
+					(auxIndex < alphabet.length - 1) ? auxIndex++ : auxIndex = 0; //until 25
+				}
+
+				result = capitalLetter ? alphabet[auxIndex].toUpperCase() : alphabet[auxIndex];
+
+				return result; 
+			}
+
+			//divides the entire sentence in word chunks and iterates to return an encrypted sentence
+			const encryptSentence = sentence => {
+				result = [];
+				let stCont = 0;
+				let ndCont = 0;
+				let txtMsg = document.getElementById("txtMsg").value;
+				let arrayMsg = txtMsg.split(" ");
+
+				for(stCont = 0; stCont < arrayMsg.length; stCont++) {
+					for(ndCont = 0; ndCont < arrayMsg[stCont].length; ndCont++){
+						result.push(encrypt(arrayMsg[stCont][ndCont]));
+					}
+					result.push(" ");
+				}
+				lblResult.innerText = (result.join(""));
+			}
+
+			btnEncrypt.addEventListener("click", encryptSentence);
+		</script> 
+	</body>
+</html> 
